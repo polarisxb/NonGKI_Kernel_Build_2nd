@@ -11,7 +11,7 @@ diff --git a/fs/open.c b/fs/open.c
  
  #include "internal.h"
  
-@@ -355,6 +358,14 @@ SYSCALL_DEFINE4(fallocate, int, fd, int, mode, loff_t, offset, loff_t, len)
+@@ -355,6 +358,15 @@ SYSCALL_DEFINE4(fallocate, int, fd, int, mode, loff_t, offset, loff_t, len)
  	return error;
  }
  
@@ -24,11 +24,10 @@ diff --git a/fs/open.c b/fs/open.c
 +__attribute__((hot))
 +extern int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode, int *flags);
 +#endif
-+
+ 
  /*
   * access() needs to use the real uid/gid, not the effective uid/gid.
-  * We do this by temporarily clearing all FS-related capabilities and
-@@ -375,6 +386,16 @@ SYSCALL_DEFINE3(faccessat, int, dfd, const char __user *, filename, int, mode)
+@@ -375,5 +387,16 @@ SYSCALL_DEFINE3(faccessat, int, dfd, const char __user *, filename, int, mode)
  	int res;
  	unsigned int lookup_flags = LOOKUP_FOLLOW;
  
@@ -43,6 +42,5 @@ diff --git a/fs/open.c b/fs/open.c
 +#elif defined(CONFIG_KSU)
 +	ksu_handle_faccessat(&dfd, &filename, &mode, NULL);
 +#endif
-+
+ 
  	if (mode & ~S_IFMT & ~S_IRWXO & ~S_IRWXG & ~S_IRWXU)
- 		return -EINVAL;
