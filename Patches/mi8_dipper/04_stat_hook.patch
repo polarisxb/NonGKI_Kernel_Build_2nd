@@ -28,7 +28,7 @@ diff --git a/fs/stat.c b/fs/stat.c
  int vfs_fstatat(int dfd, const char __user *filename, struct kstat *stat,
  		int flag)
  {
-@@ -98,6 +110,14 @@ int vfs_fstatat(int dfd, const char __user *filename, struct kstat *stat,
+@@ -98,6 +110,16 @@ int vfs_fstatat(int dfd, const char __user *filename, struct kstat *stat,
  	int error = -EINVAL;
  	unsigned int lookup_flags = 0;
  

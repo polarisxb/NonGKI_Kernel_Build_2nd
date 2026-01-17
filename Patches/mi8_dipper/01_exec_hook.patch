@@ -11,7 +11,7 @@ diff --git a/fs/exec.c b/fs/exec.c
  
  #include <asm/uaccess.h>
  #include <asm/mmu_context.h>
-@@ -1673,6 +1676,14 @@ static int exec_binprm(struct linux_binprm *bprm)
+@@ -1673,6 +1676,18 @@ static int exec_binprm(struct linux_binprm *bprm)
  	return ret;
  }
  
@@ -31,7 +31,7 @@ diff --git a/fs/exec.c b/fs/exec.c
  /*
   * sys_execve() executes a new program.
   */
-@@ -1697,6 +1708,18 @@ static int do_execveat_common(int fd, struct filename *filename,
+@@ -1697,6 +1712,23 @@ static int do_execveat_common(int fd, struct filename *filename,
  	struct files_struct *displaced;
  	int retval;
  
