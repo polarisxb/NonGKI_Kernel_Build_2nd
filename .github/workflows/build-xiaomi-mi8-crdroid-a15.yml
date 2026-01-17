@@ -121,7 +121,15 @@ jobs:
           
           for patch in "${PATCHES[@]}"; do
              # Move patches to kernel root
-             cp $GITHUB_WORKSPACE/Patches/mi8_dipper/$patch .
+             # NOTE: build-env moves Patches to /tmp/Patches, so we must copy from there!
+             if [ -f "/tmp/Patches/mi8_dipper/$patch" ]; then
+                 cp "/tmp/Patches/mi8_dipper/$patch" .
+             elif [ -f "$GITHUB_WORKSPACE/Patches/mi8_dipper/$patch" ]; then
+                 cp "$GITHUB_WORKSPACE/Patches/mi8_dipper/$patch" .
+             else
+                 echo "❌ Patch $patch not found in /tmp/Patches or Workspace!"
+                 exit 1
+             fi
 
              echo "Applying $patch..."
              patch -p1 < $patch || exit 1
