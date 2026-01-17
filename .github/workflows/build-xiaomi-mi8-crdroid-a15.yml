@@ -55,7 +55,7 @@ env:
 
   PACK_METHOD: "Anykernel3"
 
-  KERNELSU_METHOD: "shell"
+  KERNELSU_METHOD: "manual"
 
   # ===== 自定义补丁配置 (本地 NonGKI 仓库内) =====
   PATCHES_SOURCE: ""
