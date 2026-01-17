@@ -29,8 +29,8 @@ env:
   DEFCONFIG_ORIGIN_IMAGE: ""
   DEFCONFIG_FROM_BOOT: false
 
-  # ===== SukiSU 配置 =====
-  KERNELSU_SOURCE : "https://github.com/SukiSU-Ultra/SukiSU-Ultra.git"
+  # ===== SukiSU 配置 (使用修改后的 Fork) =====
+  KERNELSU_SOURCE : "https://github.com/polarisxb/SukiSU-Ultra.git"
   KERNELSU_BRANCH : "builtin"
 
   KERNELSU_AUTO_GET : "false"
@@ -62,7 +62,7 @@ env:
   PATCHES_BRANCH: ""
 
   SUSFS_FOLDER_FIXED: "mi8_dipper"
-  SUSFS_PATCH_FIXED: "01_exec_hook,02_open_hook,04_stat_hook,05_input_hook"
+  SUSFS_PATCH_FIXED: "01_exec_hook,02_open_hook,03_read_write_hook,04_stat_hook,05_input_hook"
 
   REKERNEL_ENABLE: "false"
 
@@ -117,7 +117,7 @@ jobs:
           
           echo "Applying Core Hooks..."
           # Define 5 core patches
-          PATCHES=("01_exec_hook.patch" "02_open_hook.patch" "04_stat_hook.patch" "05_input_hook.patch")
+          PATCHES=("01_exec_hook.patch" "02_open_hook.patch" "03_read_write_hook.patch" "04_stat_hook.patch" "05_input_hook.patch")
           
           for patch in "${PATCHES[@]}"; do
              # Move patches to kernel root
