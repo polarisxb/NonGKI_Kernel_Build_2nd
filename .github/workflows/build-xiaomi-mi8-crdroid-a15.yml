@@ -117,7 +117,7 @@ jobs:
           
           echo "Applying Core Hooks..."
           # Define 5 core patches
-          PATCHES=("01_exec_hook.patch" "02_open_hook.patch" "03_read_write_hook.patch" "04_stat_hook.patch" "05_input_hook.patch")
+          PATCHES=("01_exec_hook.patch" "02_open_hook.patch" "04_stat_hook.patch" "05_input_hook.patch")
           
           for patch in "${PATCHES[@]}"; do
              # Move patches to kernel root
