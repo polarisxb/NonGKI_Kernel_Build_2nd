@@ -62,7 +62,7 @@ env:
   PATCHES_BRANCH: ""
 
   SUSFS_FOLDER_FIXED: "mi8_dipper"
-  SUSFS_PATCH_FIXED: "01_exec_hook,02_open_hook,03_read_write_hook,04_stat_hook,05_input_hook"
+  SUSFS_PATCH_FIXED: "01_exec_hook,02_open_hook,04_stat_hook,05_input_hook"
 
   REKERNEL_ENABLE: "false"
 

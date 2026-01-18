@@ -186,37 +186,30 @@ patch_03_lines.append("diff --git a/fs/read_write.c b/fs/read_write.c")
 patch_03_lines.append("--- a/fs/read_write.c")
 patch_03_lines.append("+++ b/fs/read_write.c")
 
-# Hunk 1: extern (3ctx + 9add + 4ctx = OLD:7, NEW:16)
-patch_03_lines.append("@@ -456,7 +456,16 @@ ssize_t __vfs_read(struct file *file, char __user *buf, size_t count,")
-patch_03_lines.append(" }")
-patch_03_lines.append(" EXPORT_SYMBOL(__vfs_read);")
+# Hunk 1: extern declaration (after EXPORT_SYMBOL(vfs_write))
+# Context: EXPORT_SYMBOL(vfs_write) + blank line
+# Added: 4 lines
+# Context after: static inline loff_t file_pos_read
+patch_03_lines.append("@@ -576,2 +576,6 @@ EXPORT_SYMBOL(vfs_write);")
 patch_03_lines.append(" ")
-patch_03_lines.append("+#ifdef CONFIG_KSU_SUSFS")
-patch_03_lines.append("+extern bool ksu_vfs_read_hook __read_mostly;")
-patch_03_lines.append("+__attribute__((cold))")
-patch_03_lines.append("+extern int ksu_handle_vfs_read(struct file **file_ptr, char __user **buf_ptr, size_t *count_ptr, loff_t **pos);")
-patch_03_lines.append("+#elif defined(CONFIG_KSU)")
-patch_03_lines.append("+extern bool ksu_vfs_read_hook __read_mostly;")
-patch_03_lines.append("+__attribute__((cold))")
-patch_03_lines.append("+extern int ksu_handle_vfs_read(struct file **file_ptr, char __user **buf_ptr, size_t *count_ptr, loff_t **pos);")
-patch_03_lines.append("+#endif")
-patch_03_lines.append(" ")
-patch_03_lines.append(" ssize_t vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos)")
-patch_03_lines.append(" {")
-patch_03_lines.append(" \tssize_t ret;")
-
-# Hunk 2: hook call (3ctx + 5add + 2ctx = OLD:5, NEW:10)
-patch_03_lines.append("@@ -467,5 +476,10 @@ ssize_t vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos)")
-patch_03_lines.append(" {")
-patch_03_lines.append(" \tssize_t ret;")
-patch_03_lines.append(" ")
-patch_03_lines.append("+#if defined(CONFIG_KSU_SUSFS) || defined(CONFIG_KSU)")
-patch_03_lines.append("+\tif (unlikely(ksu_vfs_read_hook))")
-patch_03_lines.append("+\t\tksu_handle_vfs_read(&file, &buf, &count, &pos);")
+patch_03_lines.append("+#if defined(CONFIG_KSU_MANUAL_HOOK) && !defined(CONFIG_KSU_SUSFS)")
+patch_03_lines.append("+extern void ksu_handle_sys_read(unsigned int fd);")
 patch_03_lines.append("+#endif")
 patch_03_lines.append("+")
-patch_03_lines.append(" \tif (!(file->f_mode & FMODE_READ))")
-patch_03_lines.append(" \t\treturn -EBADF;")
+patch_03_lines.append(" static inline loff_t file_pos_read(struct file *file)")
+
+# Hunk 2: sys_read hook (inside SYSCALL_DEFINE3(read))
+# Context: ssize_t ret = -EBADF; + blank line
+# Added: 4 lines
+# Context after: if (f.file) {
+patch_03_lines.append("@@ -592,2 +596,6 @@ SYSCALL_DEFINE3(read, unsigned int, fd, char __user *, buf, size_t, count)")
+patch_03_lines.append(" \tssize_t ret = -EBADF;")
+patch_03_lines.append(" ")
+patch_03_lines.append("+#if defined(CONFIG_KSU_MANUAL_HOOK) && !defined(CONFIG_KSU_SUSFS)")
+patch_03_lines.append("+\tksu_handle_sys_read(fd);")
+patch_03_lines.append("+#endif")
+patch_03_lines.append("+")
+patch_03_lines.append(" \tif (f.file) {")
 
 write_patch("03_read_write_hook.patch", "\n".join(patch_03_lines) + "\n")
 
