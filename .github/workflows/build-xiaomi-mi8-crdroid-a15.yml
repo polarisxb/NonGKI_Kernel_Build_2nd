@@ -116,8 +116,8 @@ jobs:
           cd $GITHUB_WORKSPACE/device_kernel
           
           echo "Applying Core Hooks..."
-          # Define 5 core patches
-          PATCHES=("01_exec_hook.patch" "02_open_hook.patch" "04_stat_hook.patch" "05_input_hook.patch")
+          # Define 6 core patches
+          PATCHES=("01_exec_hook.patch" "02_open_hook.patch" "04_stat_hook.patch" "05_input_hook.patch" "06_reboot_hook.patch")
           
           for patch in "${PATCHES[@]}"; do
              # Move patches to kernel root
