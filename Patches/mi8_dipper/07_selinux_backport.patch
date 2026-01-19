@@ -1,0 +1,24 @@
+diff --git a/security/selinux/include/objsec.h b/security/selinux/include/objsec.h
+index b1f3f66..25172cc 100644
+--- a/security/selinux/include/objsec.h
++++ b/security/selinux/include/objsec.h
+@@ -138,4 +138,19 @@ struct bpf_security_struct {
+ 
+ extern unsigned int selinux_checkreqprot;
+ 
++/*
++ * KernelSU/SukiSU backport: inline helper functions for accessing
++ * security blobs on older kernels (< 5.1)
++ */
++static inline struct inode_security_struct *selinux_inode(
++					const struct inode *inode)
++{
++	return inode->i_security;
++}
++
++static inline struct task_security_struct *selinux_cred(const struct cred *cred)
++{
++	return cred->security;
++}
++
+ #endif /* _SELINUX_OBJSEC_H_ */
